@@ -21,4 +21,4 @@ def logistic_regression(df, target_column):
     accuracy = accuracy_score(y_test, y_pred)
     report = classification_report(y_test, y_pred)
 
-    return report, accuracy
+    return accuracy, report
