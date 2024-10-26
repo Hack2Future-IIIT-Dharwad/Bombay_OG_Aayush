@@ -15,5 +15,9 @@ app.register_blueprint(data_ingestion_bp)
 app.register_blueprint(model_bp)
 app.register_blueprint(data_visualization)
 
+app.register_blueprint(data_ingestion_bp)
+app.register_blueprint(model_bp)
+app.register_blueprint(data_visualization)
+
 if __name__ == "__main__":
     app.run(debug=True)
