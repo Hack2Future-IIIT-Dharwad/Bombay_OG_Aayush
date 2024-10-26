@@ -1,10 +1,9 @@
 import pandas as pd
 from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
-import numpy as np
 
-
-def gmm_clustering(df, n_components):
+def gmm_clustering(df):
+    n_components = 5
     X = pd.get_dummies(df, drop_first=True)
 
     gmm = GaussianMixture(n_components=n_components, random_state=42)
