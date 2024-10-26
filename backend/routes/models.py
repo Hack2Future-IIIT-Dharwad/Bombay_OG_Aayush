@@ -5,6 +5,8 @@ from models.cluster import dbscan, gaussianMixture, hierarchical, kmeans, meanSh
 from utils.best_model import getBestRegressionModel, getBestClassificationModel, getBestClusteringModel
 from utils.detect_model import detect_model
 import pandas as pd
+import os
+import json
 
 
 model_bp = Blueprint('model', __name__)
@@ -13,16 +15,26 @@ model_bp = Blueprint('model', __name__)
 def get_models():
     return jsonify({"message" : "Get models"})
 
-@model_bp.route('/train_model', methods=['POST'])
+@model_bp.route('/train_model', methods=['GET'])
 def train_best_model():
-    df = pd.read_csv(r"C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\test.csv")
+    data_path = os.path.join(os.getcwd(), 'uploads', 'preprocessed_data.csv')
+    metadata_path = os.path.join(os.getcwd(), 'uploads', 'metadata.json')
 
-    # df = pd.read_csv("C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\test.csv")
-    df.columns = [col.strip().replace(' ', '_').replace('[', '').replace(']', '').replace('<', '').replace('>', '') for col in df.columns]
+    if not os.path.exists(data_path) or not os.path.exists(metadata_path):
+        return jsonify({"error": "Data not found"}, 400)
+    
+    df = pd.read_csv(data_path)
 
-    target_col = None
-    if 'target' in df.columns.tolist():
-        target_col = 'target'
+    with open(metadata_path, 'r') as f:
+        metadata = json.load(f)
+    
+    target_col = metadata.get('target_variable')
+    primary_key = metadata.get('primary_key')
+
+    print("Primary Key: ", primary_key)
+
+    if(primary_key):
+        df.drop(primary_key, axis=1, inplace=True)
     
     model_type = detect_model(df, target_col)
 
