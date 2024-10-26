@@ -15,25 +15,27 @@ def allowed_file(filename):
 @data_ingestion_bp.route('/upload', methods=['POST'])
 def upload_dataset():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}, 400)
+        return jsonify({"error": "No file part"}), 400
     
     file = request.files['file']
     target_variable = request.form.get('target_variable')
     primary_key = request.form.get('primary_key')
 
     if file.filename == '':
-        return jsonify({"error": "No file exists"}, 400)
+        return jsonify({"error": "No file exists"}), 400
     
     if file and allowed_file(file.filename):
-
         filename = secure_filename(file.filename)
 
-        os.makedirs(os.path.join(os.getcwd(), 'uploads'), exist_ok=True)
+        # Set upload directory path
+        upload_folder = os.path.join(os.path.dirname(__file__), 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
 
-        save_path = os.path.join(os.getcwd(), 'uploads', filename)
+        save_path = os.path.join(upload_folder, filename)
         file.save(save_path)
 
         try:
+            # Read the file into a DataFrame
             if filename.endswith('.csv'):
                 df = pd.read_csv(save_path)
             elif filename.endswith(('.xlsx', '.xls')):
@@ -41,13 +43,14 @@ def upload_dataset():
             elif filename.endswith('.json'):
                 df = pd.read_json(save_path)
             else:
-                return jsonify({"error": "File format not supported"}, 400)
+                return jsonify({"error": "File format not supported"}), 400
             
+            # Preprocess the data
             preprocessed_df = data_preprocessing(df, exclude_columns={primary_key, target_variable}, target_column=target_variable)
 
-            os.makedirs(os.path.join(os.getcwd(), 'uploads'), exist_ok=True)
-            preprocessed_path = os.path.join(os.getcwd(), 'uploads', 'preprocessed_data.csv')
-            metadata_path = os.path.join(os.getcwd(), 'uploads', 'metadata.json')
+            # Save preprocessed data and metadata
+            preprocessed_path = os.path.join(upload_folder, 'preprocessed_data.csv')
+            metadata_path = os.path.join(upload_folder, 'metadata.json')
 
             preprocessed_df.to_csv(preprocessed_path, index=False)
             metadata = {
@@ -62,7 +65,6 @@ def upload_dataset():
 
             return jsonify({"message": "File uploaded successfully"}), 200
         except Exception as e:
-            return jsonify({"error": str(e)}, 400)
+            return jsonify({"error": str(e)}), 400
     else:
-        return jsonify({"error": "File format not supported"}, 400)
-    
+        return jsonify({"error": "File format not supported"}), 400

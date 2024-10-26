@@ -1,68 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-    ResponsiveContainer,
-    ComposedChart,
-    XAxis,
-    YAxis,
-    Tooltip,
-    CartesianGrid,
-    Cell,
-    Bar
-} from 'recharts';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
 
-const Heatmap = () => {
-    const [data, setData] = useState([]);
+// Register necessary components for Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-    // Fetch dynamic data from your JSON endpoint
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/get_data_json');
-                console.log('Fetched data:', response.data); // Log the raw data
+const Testing = () => {
+  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
-                // Check if response.data is an array
-                if (Array.isArray(response.data)) {
-                    setData(response.data);
-                } else {
-                    console.error('Expected data to be an array, but got:', response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching heatmap data:', error);
-            }
-        }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/get_data_json'); // Replace with your endpoint
+        const jsonData = response.data;
+        console.log(jsonData);
+        // Assuming jsonData is structured with two arrays: Height and Weight
+        const heightData = jsonData['Height(Inches)'].slice(0, 20); // Take the first 20 values
+        const weightData = jsonData['Weight(Pounds)'].slice(0, 20); // Take the first 20 values
 
-        fetchData();
-    }, []);
+        // Prepare the chart data
+        const data = {
+          labels: heightData, // Use heights as labels
+          datasets: [
+            {
+              label: 'Weight (Pounds)',
+              data: weightData,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderWidth: 2,
+              fill: true,
+            },
+          ],
+        };
 
-    // Function to determine color based on value
-    const getColor = (value) => {
-        if (value < 20) return '#ff0000'; // Red for low values
-        if (value < 50) return '#ffcc00'; // Yellow for medium values
-        return '#00ff00'; // Green for high values
+        // Set the chart data state
+        setChartData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
-    return (
-        <div style={{ width: '100%', height: 400 }}>
-            <h2 style={{ textAlign: 'center', color: '#333' }}>Dynamic Heatmap</h2>
-            <ResponsiveContainer>
-                <ComposedChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#8884d8"> {/* Use a default color */}
-                        {data.map((entry, index) => (
-                            <Cell
-                                key={`bar-${index}`} // Correct template literal syntax
-                                fill={getColor(entry.value)} // Color based on value
-                            />
-                        ))}
-                    </Bar>
-                </ComposedChart>
-            </ResponsiveContainer>
-        </div>
-    );
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <h1>Height vs. Weight Linear Graph (First 20 Values)</h1>
+      <Line data={chartData} />
+    </div>
+  );
 };
 
-export default Heatmap;
+export default Testing;
