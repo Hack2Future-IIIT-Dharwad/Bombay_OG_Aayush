@@ -1,14 +1,10 @@
 from flask import jsonify, Blueprint
-from models.classification import xgbcl, knn, logistic, rfc
-from models.regression import xgbr, linear, rfr, dt
-from models.cluster import dbscan, gaussianMixture, hierarchical, kmeans, meanShift
 from utils.best_model import (
     getBestRegressionModel,
     getBestClassificationModel,
     getBestClusteringModel,
 )
-
-from utils.plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
+from backend.utils.models_plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
 from utils.detect_model import detect_model
 import pandas as pd
 import os
@@ -17,7 +13,6 @@ import json
 
 model_bp = Blueprint("model", __name__)
 
-
 @model_bp.route("/get_models", methods=["GET"])
 def get_models():
     return jsonify({"message": "Get models"})
@@ -25,6 +20,7 @@ def get_models():
 
 @model_bp.route('/train_model', methods=['GET'])
 def train_best_model():
+    unprocessed_data_path = os.path.join(os.getcwd(), 'uploads', 'data.csv')
     data_path = os.path.join(os.getcwd(), 'uploads', 'preprocessed_data.csv')
     metadata_path = os.path.join(os.getcwd(), 'uploads', 'metadata.json')
 
