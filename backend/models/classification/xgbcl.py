@@ -8,8 +8,6 @@ def xgboost_classifier(df, target_column):
     X = df.drop(target_column, axis=1)
     y = df[target_column]
 
-    # y = y.map({'MET': 1, 'NOT MET': 0})
-
     X = pd.get_dummies(X, drop_first=True)
 
     X_train, X_test, y_train, y_test = train_test_split(
