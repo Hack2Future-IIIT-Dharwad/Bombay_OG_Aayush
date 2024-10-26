@@ -32,6 +32,7 @@ def upload_dataset():
         os.makedirs(upload_folder, exist_ok=True)
 
         save_path = os.path.join(upload_folder, filename)
+        print(save_path)
         file.save(save_path)
 
         try:

@@ -1,38 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js';
 
-export default function SalesChart() {
-    const [data, setData] = useState([]);
+// Register necessary components for Chart.js
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-    // Fetch data from JSON endpoint using axios
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/get_data_json'); // Updated to use axios
-                setData(response.data);
-                console.log(response.data)
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+const Testing = () => {
+  const [chartData, setChartData] = useState({ labels: [], datasets: [] });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/get_data_json'); // Replace with your endpoint
+        const jsonData = response.data;
+        console.log(jsonData);
+        // Assuming jsonData is structured with two arrays: Height and Weight
+        const heightData = jsonData['Height(Inches)'].slice(0, 20); // Take the first 20 values
+        const weightData = jsonData['Weight(Pounds)'].slice(0, 20); // Take the first 20 values
+
+        // Prepare the chart data
+        const data = {
+          labels: heightData, // Use heights as labels
+          datasets: [
+            {
+              label: 'Weight (Pounds)',
+              data: weightData,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderWidth: 2,
+              fill: true,
+            },
+          ],
         };
 
-        fetchData();
-    }, []);
+        // Set the chart data state
+        setChartData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-    return (
-        <div style={{ width: '100%', height: 400 }}>
-            <h2 style={{ textAlign: 'center', color: '#333' }}>Monthly Sales Data</h2>
-            <ResponsiveContainer>
-                <LineChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-                    <XAxis dataKey="month" stroke="#333" />
-                    <YAxis stroke="#333" />
-                    <Tooltip contentStyle={{ backgroundColor: '#fff', borderColor: '#ccc' }} />
-                    <Legend />
-                    <Line type="monotone" dataKey="sales" stroke="#22d3ee" activeDot={{ r: 8 }} />
-                </LineChart>
-            </ResponsiveContainer>
-        </div>
-    );
-}
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <h1>Height vs. Weight Linear Graph (First 20 Values)</h1>
+      <Line data={chartData} />
+    </div>
+  );
+};
+
+export default Testing;
