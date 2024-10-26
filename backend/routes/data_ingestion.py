@@ -53,7 +53,8 @@ def upload_dataset():
             metadata = {
                 "primary_key": primary_key,
                 "target_variable": target_variable,
-                "columns": preprocessed_df.columns.tolist()
+                "columns": preprocessed_df.columns.tolist(),
+                "file_name": filename
             }
 
             with open(metadata_path, 'w') as f:

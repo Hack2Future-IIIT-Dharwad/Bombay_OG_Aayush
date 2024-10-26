@@ -4,7 +4,8 @@ from utils.best_model import (
     getBestClassificationModel,
     getBestClusteringModel,
 )
-from backend.utils.models_plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
+
+# from utils.plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
 from utils.detect_model import detect_model
 import pandas as pd
 import os
@@ -20,7 +21,6 @@ def get_models():
 
 @model_bp.route('/train_model', methods=['GET'])
 def train_best_model():
-    unprocessed_data_path = os.path.join(os.getcwd(), 'uploads', 'data.csv')
     data_path = os.path.join(os.getcwd(), 'uploads', 'preprocessed_data.csv')
     metadata_path = os.path.join(os.getcwd(), 'uploads', 'metadata.json')
 
@@ -44,13 +44,13 @@ def train_best_model():
 
     if model_type == "Regression":
         best_model, metrics = getBestRegressionModel(df, target_col)
-        plot_regression_metrics(metrics)
+        # plot_regression_metrics(metrics)
     elif model_type == "Classification":
         best_model, metrics = getBestClassificationModel(df, target_col)
-        plot_classification_metrics(metrics)
+        # plot_classification_metrics(metrics)
     elif model_type == "Clustering":
         best_model, metrics = getBestClusteringModel(df)
-        plot_clustering_metrics(metrics)
+        # plot_clustering_metrics(metrics)
 
     return jsonify(
         {"model_type": model_type, "best model": best_model, "metrics": metrics}
