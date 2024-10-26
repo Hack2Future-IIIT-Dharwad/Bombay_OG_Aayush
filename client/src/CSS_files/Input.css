@@ -1,0 +1,40 @@
+.input-form-body
+{
+    margin-bottom: 120px;
+}
+.flex-1
+{
+    background-color: black;
+}
+.input-left-form
+{
+    margin-top: 90px;
+}
+.input-right-form
+{
+    margin-left: 100px;
+}
+.input-left-form-head-font
+{
+    font-size:1.6rem;
+    margin-bottom: 20px;
+    font-weight:600;
+}
+.input-left-form-text-font
+{
+    font-size:1.25rem;
+}
+.input-form-right-get_started
+{
+    font-weight: 700;
+    font-size: 1.7rem;
+}
+.input-form-right-input_box
+{
+    border:solid 1px rgb(70, 70, 70);
+    background-color: rgb(19, 19, 19);
+}
+.dataset-submit-but
+{
+    width: 180px;
+}
