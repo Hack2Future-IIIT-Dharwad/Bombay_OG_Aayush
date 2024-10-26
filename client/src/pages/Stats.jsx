@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../CSS_files/Stats.css';
 
 export default function Stats() {
-  const [datasetType, setDatasetType] = useState("Clustering");
+  const [datasetType, setDatasetType] = useState("");
   const [modelData, setModelData] = useState({
     model: "",
     metrics: {},
@@ -38,8 +38,9 @@ export default function Stats() {
     <div className="stats-body min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center text-cyan-400">
-          Unlock the Potential of Your Dataset: It's Perfect for {datasetType}!
+          Unlock the Potential of Your Dataset:
         </h1>
+        <p className='text-lg font-bold mb-6 text-center text-cyan-400'>It's Perfect for {datasetType}!</p>
         <p className="mb-8 text-gray-400 text-center">
           Dive into the Numbers: Let’s Find Your Winning Model!
         </p>
