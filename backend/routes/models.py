@@ -15,7 +15,9 @@ def get_models():
 
 @model_bp.route('/train_model', methods=['POST'])
 def train_best_model():
-    df = pd.read_csv("backend/dataset/test.csv")
+    df = pd.read_csv(r"C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\test.csv")
+
+    # df = pd.read_csv("C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\test.csv")
     df.columns = [col.strip().replace(' ', '_').replace('[', '').replace(']', '').replace('<', '').replace('>', '') for col in df.columns]
 
     target_col = None
