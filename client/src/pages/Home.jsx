@@ -17,8 +17,8 @@ export default function Home() {
       <MLOps_work />
       <Data_Potential />
       <Pricing_FAQ />
-      <Footer />
       <Input/>
+      <Footer />
     </div>
   )
 }

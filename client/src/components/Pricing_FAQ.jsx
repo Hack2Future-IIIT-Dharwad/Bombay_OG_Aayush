@@ -32,7 +32,7 @@ function Pricing_FAQ() {
             </button>
           </div>
           {/* Pro Plan */}
-          <div className="bg-orange-500 p-8 rounded-lg w-64 text-left">
+          <div className="bg-blue-900 p-8 rounded-lg w-64 text-left">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">Pro</h3>
               <span className="bg-red-600 text-white px-2 py-1 text-xs rounded-full">
