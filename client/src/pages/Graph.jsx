@@ -19,8 +19,8 @@ const Graph = () => {
         console.log(jsonData);
         
         // Assuming jsonData is structured with two arrays: Height and Weight
-        const heightData = jsonData['Height(Inches)'].slice(0, 10); // Take the first 10 values for line chart
-        const weightData = jsonData['Weight(Pounds)'].slice(0, 10); // Take the first 10 values for line chart
+        const heightData = jsonData['Column_1'].slice(0, 10); // Take the first 10 values for line chart
+        const weightData = jsonData['Column_2'].slice(0, 10); // Take the first 10 values for line chart
 
         // Prepare the line chart data
         const lineData = {
@@ -56,8 +56,8 @@ const Graph = () => {
         };
 
         // Prepare correlation chart data for all entries
-        const allHeightData = jsonData['Height(Inches)'];
-        const allWeightData = jsonData['Weight(Pounds)'];
+        const allHeightData = jsonData['Column_1'];
+        const allWeightData = jsonData['Column_2'];
 
         const correlationPoints = allHeightData.map((height, index) => ({
           x: height,
