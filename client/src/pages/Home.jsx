@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Landing from '../components/Landing';
@@ -17,8 +18,8 @@ export default function Home() {
       <MLOps_work />
       <Data_Potential />
       <Pricing_FAQ />
-      <Input/>
+      <Input />
       <Footer />
     </div>
-  )
+  );
 }

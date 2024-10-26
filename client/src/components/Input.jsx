@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Gif from "../assets/Home/Input2.gif";
-import '../CSS_files/Input.css'
+import '../CSS_files/Input.css';
 
 const Input = forwardRef((props, ref) => {
   const navigate = useNavigate();
@@ -9,12 +9,12 @@ const Input = forwardRef((props, ref) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert('Estimate submitted!');
-    navigate('/stats');
+    navigate('/options'); // Redirects to options page
   };
 
   return (
     <div className="input-form-body w-full h-screen bg-black flex flex-col items-center justify-center" ref={ref}>
-      <div className="container mx-auto w-full h-[18vw] flex flex-col just  ify-center items-center mb-5 bg-cover bg-center" style={{ backgroundImage: 'url(/bg3.webp)' }}>
+      <div className="container mx-auto w-full h-[18vw] flex flex-col justify-center items-center mb-5 bg-cover bg-center" style={{ backgroundImage: 'url(/bg3.webp)' }}>
         <h1 className="text-white text-4xl font-bold py-2">Elevate Your Machine<span className="text-pink-500"> Learning </span>Capabilities</h1>
         <p className="text-white text-lg max-w-2xl text-center">
           Harness the power of our cutting-edge machine learning technology to revolutionize your business operations and stay ahead.
