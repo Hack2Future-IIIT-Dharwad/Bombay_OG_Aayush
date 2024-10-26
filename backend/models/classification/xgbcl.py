@@ -5,7 +5,8 @@ from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
 
 def xgboost_classifier(df, target_column):
-    X = df.drop(target_column, axis=1)
+    # X = df.drop(target_column, axis=1)
+    X = df.drop(columns=[target_column])
     y = df[target_column]
 
     X = pd.get_dummies(X, drop_first=True)

@@ -7,6 +7,8 @@ from utils.best_model import (
     getBestClassificationModel,
     getBestClusteringModel,
 )
+
+from utils.plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
 from utils.detect_model import detect_model
 import pandas as pd
 
@@ -22,7 +24,7 @@ def get_models():
 @model_bp.route("/train_model", methods=["POST"])
 def train_best_model():
     df = pd.read_csv(
-        r"C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\drug200.csv"
+        r"C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\data.csv"
     )
 
     df.columns = [
@@ -36,8 +38,8 @@ def train_best_model():
     ]
 
     target_col = None
-    if "Drug" in df.columns.tolist():
-        target_col = "Drug"
+    if "price" in df.columns.tolist():
+        target_col = "price"
 
     print(target_col)
 
@@ -45,10 +47,13 @@ def train_best_model():
 
     if model_type == "Regression":
         best_model, metrics = getBestRegressionModel(df, target_col)
+        plot_regression_metrics(metrics)
     elif model_type == "Classification":
         best_model, metrics = getBestClassificationModel(df, target_col)
+        plot_classification_metrics(metrics)
     elif model_type == "Clustering":
         best_model, metrics = getBestClusteringModel(df)
+        plot_clustering_metrics(metrics)
 
     return jsonify(
         {"model_type": model_type, "best model": best_model, "metrics": metrics}

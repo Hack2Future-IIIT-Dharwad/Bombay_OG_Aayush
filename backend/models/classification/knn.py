@@ -23,4 +23,4 @@ def k_nearest_neighbors(df, target_column):
     report = classification_report(y_test, y_pred)
 
 
-    return accuracy, report, clf
+    return accuracy, report
