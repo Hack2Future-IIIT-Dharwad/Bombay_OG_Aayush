@@ -30,16 +30,16 @@ def upload_dataset():
         file.save(save_path)
 
         try:
-            if file.endswith('.csv'):
+            if filename.endswith('.csv'):
                 df = pd.read_csv(save_path)
-            elif file.endswith('.xlsx') or file.endswith('.xls'):
+            elif filename.endswith(('.xlsx', '.xls')):
                 df = pd.read_excel(save_path)
-            elif file.endswith('.json'):
+            elif filename.endswith('.json'):
                 df = pd.read_json(save_path)
             else:
                 return jsonify({"error": "File format not supported"}, 400)
             
-            column_names = df.columns.tolist()
+            
             return jsonify({"columns": column_names}, 200)
         except Exception as e:
             return jsonify({"error": str(e)}, 400)
