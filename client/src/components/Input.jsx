@@ -17,15 +17,14 @@ const Input = forwardRef((props, ref) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('csvFile', file);
-    formData.append('primaryKey', primaryKey);
-    formData.append('targetColumn', targetColumn);
+    formData.append('file', file); // Changed 'csvFile' to 'file'
+    formData.append('primary_key', primaryKey); // Changed 'primaryKey' to 'primary_key'
+    formData.append('target_variable', targetColumn); // Changed 'targetColumn' to 'target_variable'
 
     try {
       await axios.post('http://localhost:5000/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      // alert('Estimate submitted!');
       navigate('/options');
     } catch (error) {
       console.error('Error uploading the file', error);
@@ -58,8 +57,7 @@ const Input = forwardRef((props, ref) => {
               <input 
                 type="file" 
                 id="csvFile" 
-                name="csvFile" 
-                // accept=".csv" 
+                name="file" 
                 required
                 onChange={handleFileChange}
                 className="input-form-right-input_box w-full p-3 rounded-lg bg-gray-800 bg-opacity-40 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -70,7 +68,7 @@ const Input = forwardRef((props, ref) => {
               <input
                 type="text" 
                 id="primaryKey" 
-                name="primaryKey" 
+                name="primary_key" 
                 value={primaryKey}
                 onChange={(e) => setPrimaryKey(e.target.value)}
                 className="input-form-right-input_box w-full p-3 rounded-lg bg-gray-800 bg-opacity-40 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -81,7 +79,7 @@ const Input = forwardRef((props, ref) => {
               <input 
                 type="text" 
                 id="targetColumn" 
-                name="targetColumn" 
+                name="target_variable" 
                 value={targetColumn}
                 onChange={(e) => setTargetColumn(e.target.value)}
                 className="input-form-right-input_box w-full p-3 rounded-lg bg-gray-800 bg-opacity-40 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
