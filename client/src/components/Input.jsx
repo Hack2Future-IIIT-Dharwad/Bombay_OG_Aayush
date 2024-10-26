@@ -25,7 +25,7 @@ const Input = forwardRef((props, ref) => {
       await axios.post('http://localhost:5000/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      alert('Estimate submitted!');
+      // alert('Estimate submitted!');
       navigate('/options');
     } catch (error) {
       console.error('Error uploading the file', error);
