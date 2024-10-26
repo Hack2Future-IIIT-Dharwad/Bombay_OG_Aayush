@@ -11,6 +11,8 @@ from utils.best_model import (
 from utils.plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
 from utils.detect_model import detect_model
 import pandas as pd
+import os
+import json
 
 
 model_bp = Blueprint("model", __name__)
@@ -21,28 +23,27 @@ def get_models():
     return jsonify({"message": "Get models"})
 
 
-@model_bp.route("/train_model", methods=["POST"])
+@model_bp.route('/train_model', methods=['GET'])
 def train_best_model():
-    df = pd.read_csv(
-        r"C:\Users\Nancy Yadav\OneDrive\Desktop\DarkFLow\Bombay_OG_Aayush\backend\dataset\data.csv"
-    )
+    data_path = os.path.join(os.getcwd(), 'uploads', 'preprocessed_data.csv')
+    metadata_path = os.path.join(os.getcwd(), 'uploads', 'metadata.json')
 
-    df.columns = [
-        col.strip()
-        .replace(" ", "_")
-        .replace("[", "")
-        .replace("]", "")
-        .replace("<", "")
-        .replace(">", "")
-        for col in df.columns
-    ]
+    if not os.path.exists(data_path) or not os.path.exists(metadata_path):
+        return jsonify({"error": "Data not found"}, 400)
+    
+    df = pd.read_csv(data_path)
 
-    target_col = None
-    if "price" in df.columns.tolist():
-        target_col = "price"
+    with open(metadata_path, 'r') as f:
+        metadata = json.load(f)
+    
+    target_col = metadata.get('target_variable')
+    primary_key = metadata.get('primary_key')
 
-    print(target_col)
+    print("Primary Key: ", primary_key)
 
+    if(primary_key):
+        df.drop(primary_key, axis=1, inplace=True)
+    
     model_type = detect_model(df, target_col)
 
     if model_type == "Regression":
