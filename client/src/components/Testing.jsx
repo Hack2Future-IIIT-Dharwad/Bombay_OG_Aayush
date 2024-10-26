@@ -21,14 +21,14 @@ export default function SalesChart() {
     }, []);
 
     return (
-        <div className="chart-container" style={{ width: '100%', height: 400, padding: '2rem', backgroundColor: '#1a1a1a', borderRadius: '8px' }}>
-            <h2 className="chart-title" style={{ color: '#22d3ee', textAlign: 'center', marginBottom: '1rem' }}>Monthly Sales Data</h2>
-            <ResponsiveContainer width="100%" height="100%">
+        <div style={{ width: '100%', height: 400 }}>
+            <h2 style={{ textAlign: 'center', color: '#333' }}>Monthly Sales Data</h2>
+            <ResponsiveContainer>
                 <LineChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                    <XAxis dataKey="month" stroke="#e0e0e0" />
-                    <YAxis stroke="#e0e0e0" />
-                    <Tooltip contentStyle={{ backgroundColor: '#333', borderColor: '#555' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+                    <XAxis dataKey="month" stroke="#333" />
+                    <YAxis stroke="#333" />
+                    <Tooltip contentStyle={{ backgroundColor: '#fff', borderColor: '#ccc' }} />
                     <Legend />
                     <Line type="monotone" dataKey="sales" stroke="#22d3ee" activeDot={{ r: 8 }} />
                 </LineChart>
