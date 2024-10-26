@@ -3,6 +3,8 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 import os
 
+from utils.preprocessing import data_preprocessing
+
 data_ingestion_bp = Blueprint('data_ingestion', __name__)
 
 ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls'}
@@ -16,6 +18,8 @@ def upload_dataset():
         return jsonify({"error": "No file part"}, 400)
     
     file = request.files['file']
+    target_variable = request.form.get('target_variable')
+    primary_key = request.form.get('primary_key')
 
     if file.filename == '':
         return jsonify({"error": "No file exists"}, 400)
@@ -30,17 +34,17 @@ def upload_dataset():
         file.save(save_path)
 
         try:
-            if file.endswith('.csv'):
+            if filename.endswith('.csv'):
                 df = pd.read_csv(save_path)
-            elif file.endswith('.xlsx') or file.endswith('.xls'):
+            elif filename.endswith(('.xlsx', '.xls')):
                 df = pd.read_excel(save_path)
-            elif file.endswith('.json'):
+            elif filename.endswith('.json'):
                 df = pd.read_json(save_path)
             else:
                 return jsonify({"error": "File format not supported"}, 400)
             
-            column_names = df.columns.tolist()
-            return jsonify({"columns": column_names}, 200)
+            preprocessed_df = data_preprocessing(df, primary_key, target_variable)
+            return jsonify(preprocessed_df.to_dict()), 200
         except Exception as e:
             return jsonify({"error": str(e)}, 400)
     else:
