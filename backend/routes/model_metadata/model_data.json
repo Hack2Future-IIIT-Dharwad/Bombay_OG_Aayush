@@ -1,1 +1,1 @@
-{"model": "XGBCL", "metrics": {"XGBCL": 0.8666666666666667, "KNN": 0.8222222222222222, "Logistic": 0.8611111111111112, "RFC": 0.8611111111111112}, "model_type": "Classification"}
+{"model": "kmeans", "metrics": {"dbscan": -1, "gaussian": 0.2507585452793138, "hierarchical": 0.22864514868933233, "kmeans": 0.27123281055223697, "meanShift": -1}, "model_type": "Clustering"}
