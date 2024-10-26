@@ -25,6 +25,16 @@ const Input = forwardRef((props, ref) => {
       await axios.post('http://localhost:5000/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      
+      const response = await axios.get('http://localhost:5000/train_model');
+
+      const bestModel = response.data['best model'];
+      const metrics = response.data['metrics'];
+      const modelType = response.data['model_type'];
+
+      console.log("Best Model:", bestModel);
+      console.log("Metrics:", metrics);
+      console.log("Model Type:", modelType);
       navigate('/options');
     } catch (error) {
       console.error('Error uploading the file', error);

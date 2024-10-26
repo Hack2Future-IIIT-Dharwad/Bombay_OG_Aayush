@@ -1,0 +1,1 @@
+{"model": "XGBCL", "metrics": {"XGBCL": 0.8666666666666667, "KNN": 0.8222222222222222, "Logistic": 0.8611111111111112, "RFC": 0.8611111111111112}, "model_type": "Classification"}
