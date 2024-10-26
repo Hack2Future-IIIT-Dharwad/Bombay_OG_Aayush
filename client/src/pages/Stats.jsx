@@ -1,5 +1,5 @@
 import React from 'react';
-
+import '../CSS_files/Stats.css';
 export default function Component() {
   const models = [
     { type: "GradientBoosting", accuracy: 0.92, rmse: 0.15, precision: 0.89, recall: 0.94, f1Score: 0.91, bestModel: true },
@@ -9,7 +9,7 @@ export default function Component() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white p-8">
+    <div className="stats-body min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center text-cyan-400">Model Performance Comparison</h1>
         <p className="mb-8 text-gray-400 text-center">
