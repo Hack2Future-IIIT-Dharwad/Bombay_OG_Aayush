@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Options from './pages/Options';
 import Stats from './pages/Stats';
+import Graph from './pages/Graph';
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/Options" element={<Options />} />
         <Route path="/Stats" element={<Stats/>}/>
+        <Route path="/graph" element={<Graph/>}/>
       </Routes>
     </div>
   )

@@ -8,7 +8,7 @@
 }
 .input-left-form
 {
-    margin-top: 80px;
+    margin-top: 90px;
 }
 .input-right-form
 {
@@ -33,4 +33,8 @@
 {
     border:solid 1px rgb(70, 70, 70);
     background-color: rgb(19, 19, 19);
+}
+.dataset-submit-but
+{
+    width: 180px;
 }

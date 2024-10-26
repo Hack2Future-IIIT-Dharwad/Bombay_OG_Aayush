@@ -66,7 +66,7 @@ const Input = forwardRef((props, ref) => {
             </div>
             <button 
               type="submit" 
-              className="w-full p-3 mt-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
+              className="dataset-submit-but w-full p-3 mt-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105"
             >
               Let's Go
             </button>
