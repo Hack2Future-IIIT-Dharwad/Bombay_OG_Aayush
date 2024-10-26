@@ -1,10 +1,9 @@
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-import numpy as np
 
-
-def k_means_clustering(df, n_clusters):
+def k_means_clustering(df):
+    n_clusters = 5
     X = pd.get_dummies(df, drop_first=True)
 
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
@@ -13,4 +12,4 @@ def k_means_clustering(df, n_clusters):
     inertia = kmeans.inertia_
     silhouette_avg = silhouette_score(X, labels)
 
-    return inertia, silhouette_avg
+    return silhouette_avg

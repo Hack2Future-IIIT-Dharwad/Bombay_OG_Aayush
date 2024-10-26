@@ -4,7 +4,9 @@ from sklearn.metrics import silhouette_score
 import numpy as np
 
 
-def dbscan_clustering(df, eps=0.5, min_samples=5):
+def dbscan_clustering(df):
+    eps = 0.5
+    min_samples = 5
     X = pd.get_dummies(df, drop_first=True)
 
     dbscan = DBSCAN(eps=eps, min_samples=min_samples)

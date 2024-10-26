@@ -1,11 +1,9 @@
 import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
-import numpy as np
 
-
-
-def hierarchical_clustering(df, n_clusters):
+def hierarchical_clustering(df):
+    n_clusters = 5
     X = pd.get_dummies(df, drop_first=True)
 
     hierarchical = AgglomerativeClustering(n_clusters=n_clusters)
