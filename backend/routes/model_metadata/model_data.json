@@ -1,1 +1,1 @@
-{"model": "kmeans", "metrics": {"dbscan": -1, "gaussian": 0.17490877770771754, "hierarchical": 0.15788240661667557, "kmeans": 0.19818722746883402, "meanShift": -1}, "model_type": "Clustering"}
+{"model": "kmeans", "metrics": {"dbscan": -1, "gaussian": 0.2507585452793138, "hierarchical": 0.22864514868933233, "kmeans": 0.27123281055223697, "meanShift": -1}, "model_type": "Clustering"}
