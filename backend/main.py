@@ -9,7 +9,7 @@ from routes.data_visualization import data_visualization
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.register_blueprint(data_ingestion_bp)
 app.register_blueprint(model_bp)

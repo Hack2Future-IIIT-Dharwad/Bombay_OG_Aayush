@@ -1,7 +1,7 @@
 import pandas as pd
 
-def detect_model(df, target_col = None):
-    if target_col == None:
+def detect_model(df, target_col = ''):
+    if target_col == '':
         return "Clustering"
 
     target_data = df[target_col]
