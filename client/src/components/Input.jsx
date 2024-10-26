@@ -1,15 +1,36 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Gif from "../assets/Home/Input2.gif";
 import '../CSS_files/Input.css';
+import axios from 'axios';
 
 const Input = forwardRef((props, ref) => {
   const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+  const [primaryKey, setPrimaryKey] = useState('');
+  const [targetColumn, setTargetColumn] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Estimate submitted!');
-    navigate('/options'); // Redirects to options page
+    const formData = new FormData();
+    formData.append('csvFile', file);
+    formData.append('primaryKey', primaryKey);
+    formData.append('targetColumn', targetColumn);
+
+    try {
+      await axios.post('http://localhost:5000/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      alert('Estimate submitted!');
+      navigate('/options');
+    } catch (error) {
+      console.error('Error uploading the file', error);
+      alert('There was an issue uploading the file');
+    }
   };
 
   return (
@@ -29,18 +50,18 @@ const Input = forwardRef((props, ref) => {
           <img src={Gif} alt="Ai animation" className="w-4/5 h-auto" />
         </div>
 
-        {/* Glassmorphism Form */}
         <div className="input-right-form flex-1 bg-white p-8 rounded-2xl shadow-lg backdrop-blur-lg bg-opacity-20 border border-white border-opacity-30 text-white">
           <h2 className="input-form-right-get_started text-2xl font-semibold mb-6">Get Started</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="csvFile" className="block text-lg font-medium mb-2">Upload CSV File</label>
+              <label htmlFor="csvFile" className="block text-lg font-medium mb-2">Upload </label>
               <input 
                 type="file" 
                 id="csvFile" 
                 name="csvFile" 
-                accept=".csv" 
-                required 
+                // accept=".csv" 
+                required
+                onChange={handleFileChange}
                 className="input-form-right-input_box w-full p-3 rounded-lg bg-gray-800 bg-opacity-40 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -50,7 +71,8 @@ const Input = forwardRef((props, ref) => {
                 type="text" 
                 id="primaryKey" 
                 name="primaryKey" 
-                required 
+                value={primaryKey}
+                onChange={(e) => setPrimaryKey(e.target.value)}
                 className="input-form-right-input_box w-full p-3 rounded-lg bg-gray-800 bg-opacity-40 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -60,7 +82,8 @@ const Input = forwardRef((props, ref) => {
                 type="text" 
                 id="targetColumn" 
                 name="targetColumn" 
-                required 
+                value={targetColumn}
+                onChange={(e) => setTargetColumn(e.target.value)}
                 className="input-form-right-input_box w-full p-3 rounded-lg bg-gray-800 bg-opacity-40 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
