@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from werkzeug.utils import secure_filename
 import pandas as pd
 import os
 
@@ -21,7 +22,11 @@ def upload_dataset():
     
     if file and allowed_file(file.filename):
 
-        save_path = os.path.join(os.getcwd(), 'uploads', file.filename)
+        filename = secure_filename(file.filename)
+
+        os.makedirs(os.path.join(os.getcwd(), 'uploads'), exist_ok=True)
+
+        save_path = os.path.join(os.getcwd(), 'uploads', filename)
         file.save(save_path)
 
         try:
