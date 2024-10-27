@@ -5,6 +5,7 @@ import Options from './pages/Options';
 import Stats from './pages/Stats';
 import Graph from './pages/Graph';
 import Testing from './components/Testing'
+import Query from './pages/Query'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/Stats" element={<Stats/>}/>
         <Route path="/graph" element={<Graph/>}/>
         <Route path="/testing" element={<Testing/>}/>
+        <Route path="/query" element={<Query/>}/>
       </Routes>
     </div>
   )
