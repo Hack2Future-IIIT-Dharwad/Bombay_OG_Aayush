@@ -5,6 +5,7 @@ import Options from './pages/Options';
 import Stats from './pages/Stats';
 import Graph from './pages/Graph';
 import Testing from './components/Testing'
+
 export default function App() {
   return (
     <div className='bg-black px-36 p-5'>

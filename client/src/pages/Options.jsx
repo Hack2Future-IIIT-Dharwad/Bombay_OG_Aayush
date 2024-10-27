@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 
 export default function Options() {
   const items = [
-    { name: "Data Viz", icon: <BarChartIcon fontSize="large" className="icon" />, path:"#" },
+    { name: "Data Viz", icon: <BarChartIcon fontSize="large" className="icon" />, path:"/graph" },
     { name: "Model Viz", icon: <AccountTree fontSize="large" className="icon" /> , path:"/stats"},
-    { name: "Query Viz", icon: <QueryStatsIcon fontSize="large" className="icon" />, path:"/stats"},
+    { name: "Query Viz", icon: <QueryStatsIcon fontSize="large" className="icon" />, path:"#"},
   ];
 
   return (
