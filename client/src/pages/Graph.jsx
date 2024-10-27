@@ -31,6 +31,7 @@ ChartJS.register(
   Title
 );
 
+
 const Graph = () => {
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [scatterData, setScatterData] = useState({ datasets: [] });
@@ -177,14 +178,14 @@ const Graph = () => {
       <p className="support-text-graph">Select the variables to plot:</p>
 
       <div className="dropdowns-container">
-        <label htmlFor="x-dropdown">Select X-axis:</label>
+        <label htmlFor="x-dropdown">Select X-axis :</label>
         <select id="x-dropdown" value={selectedX} onChange={handleXChange}>
           {columnNames.map((col) => (
             <option key={col} value={col}>{col}</option>
           ))}
         </select>
 
-        <label htmlFor="y-dropdown">Select Y-axis:</label>
+        <label htmlFor="y-dropdown">Select Y-axis :</label>
         <select id="y-dropdown" value={selectedY} onChange={handleYChange}>
           {columnNames.map((col) => (
             <option key={col} value={col}>{col}</option>
@@ -205,6 +206,7 @@ const Graph = () => {
             <Scatter data={scatterData} />
           </div>
           <p className="graph-label">Scatter Plot</p>
+          
         </div>
 
         <div className="graph-card">
@@ -224,7 +226,6 @@ const Graph = () => {
         <div className="graph-card">
           <div className="graph-placeholder">
             <Bubble data={bubbleChartData} />
-            <p>Bubble Chart</p>
           </div>
           <p className="graph-label">Bubble Chart</p>
         </div>
