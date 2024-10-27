@@ -24,10 +24,10 @@ def getBestRegressionModel(processed_df, target_col):
 
 
 def getBestClassificationModel(processed_df, target_col):
-    xgbcl_acc, _ = xgbcl.xgboost_classifier(processed_df, target_col)
-    knn_acc, _ = knn.k_nearest_neighbors(processed_df, target_col)
-    logistic_acc, _ = logistic.logistic_regression(processed_df, target_col)
-    rfc_acc, _ = rfc.random_forest_classifier(processed_df, target_col)
+    xgbcl_acc= xgbcl.xgboost_classifier(processed_df, target_col)
+    knn_acc= knn.k_nearest_neighbors(processed_df, target_col)
+    logistic_acc= logistic.logistic_regression(processed_df, target_col)
+    rfc_acc = rfc.random_forest_classifier(processed_df, target_col)
 
     acc_scores = {
         "XGBCL": xgbcl_acc,

@@ -1,39 +1,50 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import '../CSS_files/Load.css'
 
-export default function Component() {
-  const [progress, setProgress] = useState(0)
-  const [statusMessage, setStatusMessage] = useState("Initializing visualization...")
+export default function Load({ onComplete }) {
+  const [progress, setProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState("Initializing visualization...");
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prevProgress => {
-        const newProgress = Math.min(prevProgress + Math.random() * 10, 100)
-        if (newProgress < 25) {
-          setStatusMessage("Loading data models...")
-        } else if (newProgress < 50) {
-          setStatusMessage("Processing data insights...")
-        } else if (newProgress < 75) {
-          setStatusMessage("Applying visual transformations...")
-        } else if (newProgress < 100) {
-          setStatusMessage("Finalizing visualization...")
+        if (prevProgress < 95) {
+          const newProgress = Math.min(prevProgress + Math.random() * 10, 95); // Ensure it does not exceed 95%
+          if (newProgress < 25) {
+            setStatusMessage("Loading data models...");
+          } else if (newProgress < 50) {
+            setStatusMessage("Processing data insights...");
+          } else if (newProgress < 75) {
+            setStatusMessage("Applying visual transformations...");
+          } else if (newProgress < 95) {
+            setStatusMessage("Finalizing visualization...");
+          }
+          return newProgress;
         } else {
-          setStatusMessage("Visualization complete. Resetting for next task...")
+          // Once progress reaches 95%, it will stay there until completion
+          setStatusMessage("Waiting for visualization to complete...");
+          return 95;
         }
-        return newProgress === 100 ? 0 : newProgress
-      })
-    }, 1000)
+      });
+    }, 1000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (progress === 95) {
+      onComplete(); // Call onComplete when progress is at 95%
+    }
+  }, [progress, onComplete]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-6">
+    <div className="load-body min-h-screen flex items-center justify-center bg-gray-900 text-white p-6">
       <div className="w-full max-w-4xl space-y-10 text-center">
         <h1 className="text-4xl font-bold mb-4">Visualizing Your Data</h1>
         <p className="text-lg opacity-80">{statusMessage}</p>
-        
+
         <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 space-y-6 shadow-lg">
           <div className="relative w-full h-4 bg-gray-700 rounded overflow-hidden">
             <div 
@@ -43,7 +54,7 @@ export default function Component() {
           </div>
           <p className="text-right text-sm text-blue-300 mt-2">{Math.round(progress)}% Complete</p>
         </div>
-        
+
         <div className="text-center animate-pulse mt-10">
           <p className="text-xl font-semibold">Please wait as we prepare your data insights...</p>
         </div>
@@ -60,5 +71,5 @@ export default function Component() {
         }
       `}</style>
     </div>
-  )
+  );
 }

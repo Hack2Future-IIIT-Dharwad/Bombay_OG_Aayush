@@ -14,13 +14,10 @@ Streamline your machine learning journey with automated model selection and seam
 - **Python:** Core programming language for model development and data handling.
 - **Scikit-learn:** Essential for implementing machine learning algorithms and model evaluation.
 - **Pandas:** Simplifies data manipulation and preprocessing tasks.
-- **Flask/Django:** Web frameworks for building RESTful APIs for model deployment.
+- **Flask:** Web frameworks for building RESTful APIs for model deployment.
 - **TensorFlow/PyTorch:** Advanced frameworks for training complex deep learning models.
-- **Docker:** Ensures consistent deployment across different environments.
-- **AWS/GCP/Azure:** Cloud platforms for scalable backend infrastructure.
-- **SQL/NoSQL Databases:** Efficiently manage training data, model parameters, and results.
+- **AWS:** Cloud platform for scalable backend infrastructure.
 
-## Getting Started
 ## Setup Instructions
 
 Follow these steps to clone the repository, set up the Python environment, and run the chess engine:
@@ -29,26 +26,42 @@ Follow these steps to clone the repository, set up the Python environment, and r
 
    Open a terminal and run the following command to clone the repository:
 
-   bash
-   git clone https://github.com/Aayush-Kr-13/Chess-Engine-Python.git
-   
-2. **Create a Virtual Environment**
+   ```bash
+   git clone https://github.com/Hack2Future-IIIT-Dharwad/Bombay_OG_Aayush
 
-   Navigate into the cloned repository directory:
+### Backend
+1. **Create a Virtual Environment in the backend**
+   ```bash
+   cd Bombay_OG_Aayush
+   cd backend
+   python -m venv venv
+   ```
+2. **Install the requirements**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Run the backend**
+   ```bash
+   python main.py
+   ````                                                          
 
-   bash
-    cd Chess-Engine-Python
-   
-   Create a new virtual environment using pyenv:
-   bash
-    pyenv virtualenv 3.12.0 chessify
-   
-3. *Configure pyenv*
+### Frontend
+1. **Navigate to client directory**
+   ```bash
+   cd client
+   ```
+2. **Install the dependencies**
+   ```bash
+   npm install
+   ```
+3. **Run client**
+   ```bash
+   npm start
+   ```
 
-   Add pyenv to your PATH and initialize it. You can add these lines to your shell configuration file (e.g., .bashrc, .zshrc, etc.):
-
-   bash
-    export PATH="$HOME/.pyenv/bin:$PATH"
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
+# License
+Copyright (c) 2024 
+1. Ashish Lal
+2. Aayush Kumar
+3. Aditya Dev
+4. Nancy Yadav
