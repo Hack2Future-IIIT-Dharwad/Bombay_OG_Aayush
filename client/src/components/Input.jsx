@@ -20,7 +20,7 @@ const Input = forwardRef((props, ref) => {
     formData.append('file', file); // Changed 'csvFile' to 'file'
     formData.append('primary_key', primaryKey); // Changed 'primaryKey' to 'primary_key'
     formData.append('target_variable', targetColumn); // Changed 'targetColumn' to 'target_variable'
-
+    console.log(formData)
     try {
       await axios.post('http://localhost:5000/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
