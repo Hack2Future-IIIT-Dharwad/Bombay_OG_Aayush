@@ -4,15 +4,18 @@ from utils.best_model import (
     getBestClassificationModel,
     getBestClusteringModel,
 )
-
-# from utils.plot import plot_classification_metrics, plot_clustering_metrics, plot_regression_metrics
 from utils.detect_model import detect_model
 import pandas as pd
-import os
 import json
-# import model_data from "../"
+import boto3
+from botocore.exceptions import NoCredentialsError
+from io import BytesIO
+import pickle
 
 model_bp = Blueprint("model", __name__)
+
+s3_client = boto3.client('s3')
+BUCKET_NAME = "darkflow-backend-storage"
 
 @model_bp.route("/get_models", methods=["GET"])
 def get_models():
@@ -21,56 +24,65 @@ def get_models():
 
 @model_bp.route('/train_model', methods=['GET'])
 def train_best_model():
-    data_path = os.path.join(os.path.dirname(__file__), 'uploads', 'preprocessed_data.csv')
-    metadata_path = os.path.join(os.path.dirname(__file__), 'uploads', 'metadata.json')
+    data_key = 'preprocessed_data.csv'
+    metadata_key = 'metadata.json'
 
-    if not os.path.exists(data_path) or not os.path.exists(metadata_path):
-        return jsonify({"error": "Data not found"}, 400)
-    
-    df = pd.read_csv(data_path)
+    try:
+        # Retrieve preprocessed data from S3
+        data_object = s3_client.get_object(Bucket=BUCKET_NAME, Key=data_key)
+        df = pd.read_csv(BytesIO(data_object['Body'].read()))
 
-    with open(metadata_path, 'r') as f:
-        metadata = json.load(f)
-    
-    target_col = metadata.get('target_variable')
-    primary_key = metadata.get('primary_key')
+        # Retrieve metadata from S3
+        metadata_object = s3_client.get_object(Bucket=BUCKET_NAME, Key=metadata_key)
+        metadata = json.loads(metadata_object['Body'].read())
 
-    if(primary_key != ''):
-        df.drop(primary_key, axis=1, inplace=True)
-    
-    model_type = detect_model(df, target_col)
+        target_col = metadata.get('target_variable')
+        primary_key = metadata.get('primary_key')
 
-    if model_type == "Regression":
-        print("regression")
-        best_model, metrics = getBestRegressionModel(df, target_col)
-        # plot_regression_metrics(metrics)
-    elif model_type == "Classification":
-        best_model, metrics = getBestClassificationModel(df, target_col)
-        # plot_classification_metrics(metrics)
-    elif model_type == "Clustering":
-        print("yaha")
-        best_model, metrics = getBestClusteringModel(df)
-        # plot_clustering_metrics(metrics)
+        if primary_key:
+            df.drop(primary_key, axis=1, inplace=True)
 
-    model_metadata = os.path.join(os.path.dirname(__file__), 'model_metadata')
-    os.makedirs(model_metadata, exist_ok=True)
+        if target_col and target_col in df.columns:
+            model_type = detect_model(df, target_col)
+        else:
+            model_type = "Clustering"
 
-    model_data = {
-        "model": best_model,
-        "metrics": metrics,
-        "model_type": model_type
-    }
+        # Train and retrieve the best model based on model type
+        if model_type == "Regression":
+            best_model, metrics = getBestRegressionModel(df, target_col)
+            model_directory = 'model_files/regression/'
+        elif model_type == "Classification":
+            best_model, metrics = getBestClassificationModel(df, target_col)
+            model_directory = 'model_files/classification/'
+        elif model_type == "Clustering":
+            best_model, metrics = getBestClusteringModel(df)
+            model_directory = 'model_files/clustering/'
+        else:
+            return jsonify({"error": "Unable to determine model type"}), 400
 
-    with open(os.path.join(model_metadata, 'model_data.json'), 'w') as f:
-        json.dump(model_data, f)
-    
-    return jsonify(
-        {"model_type": model_type, "best model": best_model, "metrics": metrics}
-    )
+        # Save model and metrics to S3
+        model_filename = f'{model_type.lower()}_best_model.pkl'
+        metrics_filename = f'{model_type.lower()}_metrics.json'
 
-@model_bp.route('/modeldata', methods=['GET'])
-def get_model_data():
-    path = os.path.join(os.path.dirname(__file__), "model_metadata", "model_data.json")
-    with open(path) as f:
-        data = json.load(f)
-    return jsonify(data)
+        # Serialize the model and save it to S3
+        model_buffer = BytesIO()
+        pickle.dump(best_model, model_buffer)
+        model_buffer.seek(0)
+        s3_client.put_object(
+            Bucket=BUCKET_NAME, Key=f'{model_directory}{model_filename}', Body=model_buffer
+        )
+
+        # Save metrics to S3
+        metrics_buffer = json.dumps(metrics).encode('utf-8')
+        s3_client.put_object(
+            Bucket=BUCKET_NAME, Key=f'{model_directory}{metrics_filename}', Body=metrics_buffer
+        )
+
+        return jsonify(
+            {"model_type": model_type, "best_model": model_filename, "metrics": metrics}
+        )
+
+    except NoCredentialsError:
+        return jsonify({"error": "Credentials not available"}), 403
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400

@@ -33,26 +33,30 @@ def upload_dataset():
         filename = secure_filename(file.filename)
 
         try:
+            # Upload the file to S3
             s3_client.upload_fileobj(file, BUCKET_NAME, filename)
 
-            s3_file_url = f'https://{BUCKET_NAME}.s3.amazonaws.com/{filename}'
+            # Read file from S3 using boto3 client
+            s3_object = s3_client.get_object(Bucket=BUCKET_NAME, Key=filename)
+            file_content = s3_object['Body'].read()
 
+            # Load the data into a pandas DataFrame
             if filename.endswith('.csv'):
-                df = pd.read_csv(s3_file_url)
+                df = pd.read_csv(pd.io.common.BytesIO(file_content))
             elif filename.endswith(('.xlsx', '.xls')):
-                df = pd.read_excel(s3_file_url)
+                df = pd.read_excel(pd.io.common.BytesIO(file_content))
             else:
                 return jsonify({"error": "File format not supported"}), 400
             
+            # Preprocess the data
             preprocessed_df = data_preprocessing(df, exclude_columns={primary_key, target_variable}, target_column=target_variable)
 
+            # Prepare preprocessed data for upload
             preprocessed_filename = 'preprocessed_data.csv'
-            metadata_filename = 'metadata.json'
-
             preprocessed_buffer = preprocessed_df.to_csv(index=False).encode('utf-8')
-
             s3_client.put_object(Bucket=BUCKET_NAME, Key=preprocessed_filename, Body=preprocessed_buffer)
             
+            # Prepare metadata for upload
             metadata = {
                 "primary_key": primary_key,
                 "target_variable": target_variable,
@@ -60,9 +64,11 @@ def upload_dataset():
                 "file_name": filename
             }
             metadata_buffer = json.dumps(metadata).encode('utf-8')
+            metadata_filename = 'metadata.json'
             s3_client.put_object(Bucket=BUCKET_NAME, Key=metadata_filename, Body=metadata_buffer)
 
-            return jsonify({"message": "File uploaded successfully", "s3_url": s3_file_url}), 200
+            s3_file_url = f'https://{BUCKET_NAME}.s3.amazonaws.com/{filename}'
+            return jsonify({"message": "File uploaded and processed successfully", "s3_url": s3_file_url}), 200
         except NoCredentialsError:
             return jsonify({"error": "Credentials not available"}), 403
         except Exception as e:
