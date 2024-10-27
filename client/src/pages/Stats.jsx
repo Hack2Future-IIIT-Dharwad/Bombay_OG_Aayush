@@ -137,7 +137,11 @@ export default function Stats() {
                     );
                   })}
                   <td className="p-4 border-t border-gray-700"> {/* API Key Column */ }
-                    {/* This cell intentionally left empty as per your requirement */ }
+                    {modelData.model === modelType && (
+                        <button className="bg-teal-500 text-white py-2 px-4 rounded hover:bg-teal-600">
+                          Get your API key
+                        </button>
+                      )}
                   </td>
                 </tr>
               ))}
