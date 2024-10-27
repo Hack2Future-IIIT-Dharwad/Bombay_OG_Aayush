@@ -51,7 +51,7 @@ const Input = forwardRef((props, ref) => {
         </p>
       </div>
 
-      <div className="w-4/5 max-w-7xl flex flex-wrap gap-10 mt-5">
+      <div className="w-4/5 max-w-9xl flex flex-wrap gap-10 mt-5">
         <div className="input-left-form flex-1 text-white">
           <h1 className="input-left-form-head-font text-2xl mb-2">Unlock the Future of Machine Learning</h1>
           <p className="input-left-form-text-font text-gray-400 mb-2">Discover the Power of ML-Ops: Effortlessly Manage and Scale Your</p>
