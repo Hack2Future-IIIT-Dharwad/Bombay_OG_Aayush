@@ -28,20 +28,62 @@ export default function Stats() {
     };
 
     fetchData();
-  }, []);
+  }, [modelData.model]);
 
-  // Mapping dataset types to column headers
-  const columnHeaders = {
-    Classification: ["Accuracy", "Precision", "F1 Score", "API Key"],
-    Regression: ["MSE", "RMSE", "R Squared", "API Key"],
-    Clustering: ["Silhouette Avg", "Davies-Bouldin", "Calinski-Harabasz", "API Key"],
+  // Mapping dataset types to column headers and their corresponding metric keys
+  const columnMappings = {
+    Classification: {
+      headers: ["Accuracy", "Precision", "F1 Score", "API Key"],
+      keys: ["accuracy", "precision", "f1Score"],
+    },
+    Regression: {
+      headers: ["MSE", "RMSE", "R Squared", "API Key"],
+      keys: ["mse", "rmse", "rSquared"],
+    },
+    Clustering: {
+      headers: ["Silhouette Avg", "Davies-Bouldin", "Calinski-Harabasz", "API Key"],
+      keys: ["silhouette", "daviesBouldin", "calinskiHarabasz"],
+    },
   };
 
-  // Get column headers based on datasetType
-  const headers = columnHeaders[datasetType] || [];
+  // Get column headers and corresponding keys based on datasetType
+  const { headers, keys } = columnMappings[datasetType] || { headers: [], keys: [] };
 
   // Convert metrics object to array of [modelType, metrics] pairs
-  const models = Object.entries(modelData.metrics);
+  const models = Object.entries(modelData.metrics).map(([modelType, metrics]) => {
+    let formattedMetrics;
+
+    // Determine the metrics structure based on model type
+    switch (datasetType) {
+      case "Classification":
+        formattedMetrics = {
+          accuracy: metrics[0],
+          precision: metrics[1],
+          f1Score: metrics[2],
+        };
+        break;
+      case "Regression":
+        formattedMetrics = {
+          mse: metrics[0],
+          rmse: metrics[1],
+          rSquared: metrics[2],
+        };
+        break;
+      case "Clustering":
+        formattedMetrics = {
+          silhouette: metrics[0],
+          daviesBouldin: metrics[1],
+          calinskiHarabasz: metrics[2],
+        };
+        break;
+      default:
+        formattedMetrics = {};
+    }
+    
+    console.log('Formatted metrics:', formattedMetrics); // Debugging line
+
+    return [modelType, formattedMetrics];
+  });
 
   return (
     <div className="stats-body min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white p-8">
@@ -81,13 +123,21 @@ export default function Stats() {
                   } hover:bg-gray-800 transition-colors duration-200`}
                 >
                   <td className="p-4 border-t border-gray-700">{modelType}</td>
-                  {headers.slice(0, -1).map((header, idx) => (
-                    <td key={idx} className="p-4 border-t border-gray-700">
-                      {metrics[header] !== undefined ? metrics[header].toFixed(2) : "N/A"}
-                    </td>
-                  ))}
-                  <td className="p-4 border-t border-gray-700"> {/* API Key Column */}
-                    {/* This cell intentionally left empty as per your requirement */}
+                  {keys.map((key, idx) => {
+                    const value = metrics[key]; // Access the value using the correct key
+
+                    console.log(`Model: ${modelType}, Key: ${key}, Value: ${value}`); // Debugging line
+
+                    return (
+                      <td key={idx} className="p-4 border-t border-gray-700">
+                        {value !== undefined
+                          ? value.toFixed(2)
+                          : "N/A"}
+                      </td>
+                    );
+                  })}
+                  <td className="p-4 border-t border-gray-700"> {/* API Key Column */ }
+                    {/* This cell intentionally left empty as per your requirement */ }
                   </td>
                 </tr>
               ))}
