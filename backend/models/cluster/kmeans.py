@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
 
 def k_means_clustering(df):
     n_clusters = 5
@@ -9,7 +9,14 @@ def k_means_clustering(df):
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
     kmeans.fit(X)
     labels = kmeans.labels_
-    inertia = kmeans.inertia_
-    silhouette_avg = silhouette_score(X, labels)
 
-    return silhouette_avg
+    if len(set(labels)) > 1:
+        silhouette_avg = silhouette_score(X, labels)
+        davies_bouldin = davies_bouldin_score(X, labels)
+        calinski_harabasz = calinski_harabasz_score(X, labels)
+    else:
+        silhouette_avg = -1  
+        davies_bouldin = -1
+        calinski_harabasz = -1
+
+    return silhouette_avg, davies_bouldin, calinski_harabasz
