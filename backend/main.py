@@ -5,6 +5,7 @@ import os
 from routes.data_ingestion import data_ingestion_bp
 from routes.models import model_bp
 from routes.data_visualization import data_visualization
+from routes.query import query_bp
 
 load_dotenv()
 
@@ -14,6 +15,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 app.register_blueprint(data_ingestion_bp)
 app.register_blueprint(model_bp)
 app.register_blueprint(data_visualization)
+app.register_blueprint(query_bp)
 
 
 if __name__ == "__main__":
